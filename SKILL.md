@@ -18,6 +18,7 @@ agent_created: true
 |------|------------|------|
 | **选型入口** | 「毕业论文怎么选题」「帮我定路线」「学生想做问卷/DID/案例」 | **先读 references/route-selection.md**，走四步引导流程定路线，再转接下表 |
 | **环境与数据预检** | 「学校有什么数据库」「需要装什么软件」「数据拿不到怎么办」 | 读 references/env-and-data.md（数据库权限矩阵、六路线软硬件门槛、本机执行环境约定） |
+| **原理学习** | 「为什么做平行趋势」「三步法原理」「熵值法是什么思想」 | 读对应 references/principles-*.md（每路线一份：原理/前提/结果解读/常见误读） |
 | 路线 A：财务指标型 | 「X 对绩效的影响」现成 CSMAR 指标 | 读 references/pipeline.md + data-schema.md |
 | 路线 B：文本+专利型 | 「AI/数字化转型对创新的影响」 | 读 references/route-text-patent.md |
 | 路线 C：政策评估型 | 「某试点政策对企业的影响」「DID」 | 读 references/route-did.md，改 assets/did_template.do |
@@ -43,6 +44,8 @@ agent_created: true
 - 「毕业论文怎么选题/定路线」→ route-selection.md 四步引导 + 决策树，落定后转对应路线 reference
 - 「学校数据库/数据权限/免费数据」→ env-and-data.md 第二节权限矩阵（含无权限时的降级替代）
 - 「要装什么软件/环境报错/Stata 批处理怎么跑」→ env-and-data.md 第一、三节
+- 「这个方法什么原理/结果怎么看」→ 对应路线的 principles-*.md（A principles-financial / B principles-text-patent / C principles-did / D principles-survey / E principles-event-study / F principles-case-index）
+- 「怎么组织代码/一个入口跑全部」→ assets/master.do（全局参数区改路线与路径）+ assets/thesis_utils.ado（通用程序）
 - 「帮我合并这些 CSMAR 的 excel」→ data-schema.md 的清洗管线 + pipeline_template.do 第 1-2 节
 - 「做什么检验才够」→ 对应路线 reference 的合格线小节（A/B 通用底线见 pipeline.md：基准 + 2 项稳健性 + 1 项内生性 + 1 项机制或异质性）
 - 「调节效应不显著怎么办」→ pipeline.md 第 8 节的备选方案（分组回归、滞后交互、连续变量 vs 虚拟变量）
@@ -64,9 +67,12 @@ agent_created: true
 - `references/route-survey.md`：路线 D——信效度、CFA/SEM、Bootstrap 中介、共同方法偏差
 - `references/route-event-study.md`：路线 E——窗口设定、CAR 计算与检验
 - `references/route-case-index.md`：路线 F——案例研究范式、熵值法+TOPSIS
+- `references/principles-*.md`：六份原理教学文档（每路线一份）——计量思想、适用前提、结果逐行解读、答辩高频误读
 - `references/chapter-map.md`：论文章节 ↔ 检验对应关系、假设提出写法、结果段落模板
 - `references/defense-checklist.md`：盲审与答辩常见问题自查清单
-- `assets/pipeline_template.do`：路线 A/B do 文件骨架（占位符式）
+- `assets/master.do`：主运行脚本——全局参数区选路线/设路径，自动环境自检后调度对应模板
+- `assets/thesis_utils.ado`：通用 ado 程序集——thesis_env（环境自检+log）、thesis_winsor（缩尾）、thesis_table（统一出表）、thesis_event（相对时间虚拟变量）
+- `assets/pipeline_template.do`：路线 A/B do 文件骨架（占位符式，头部注释含数据格式与预期输出）
 - `assets/did_template.do`：路线 C DID 全流程模板（含平行趋势 coefplot）
 - `assets/survey_pipeline.py`：路线 D Python 分析管线（信度→KMO→CFA 拟合→Harman→回归→Bootstrap；已实测）
 - `assets/event_study_template.do`：路线 E 事件研究 CAR 模板
@@ -75,4 +81,4 @@ agent_created: true
 
 ## 代码模板实测状态
 
-survey_pipeline.py、text_freq.py、entropy_topsis.py 已用合成数据端到端实测；did_template.do 与 event_study_template.do 的核心逻辑（reghdfe 基准、相对时间事件研究、市场模型 CAR）已用 Stata 16 + 合成数据实测通过。模板均为占位符式骨架，学生需按选题填空；本机批处理运行 do 文件时需先 `sysdir set PLUS` 指向外部包目录（profile.do 在批处理下可能未生效）。
+survey_pipeline.py、text_freq.py、entropy_topsis.py 已用合成数据端到端实测；did_template.do 与 event_study_template.do 的核心逻辑（reghdfe 基准、相对时间事件研究、市场模型 CAR）已用 Stata 16 + 合成数据实测通过；thesis_utils.ado 四个程序（env/winsor/table/event）已在 Stata 实测通过（含版本检查、缩尾、出表锚定、事件变量）。模板均为占位符式骨架，学生需按选题填空；本机批处理运行 do 文件时需先 `sysdir set PLUS` 指向外部包目录（profile.do 在批处理下可能未生效），且输出建议用绝对路径或依赖 thesis_table 的 $projdir 锚定（实测相对路径可能落到意外目录）。do 文件须以 UTF-8 无 BOM 保存，否则批处理报 "is not a valid command name"。

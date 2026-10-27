@@ -58,8 +58,10 @@
 
 ### 环境预检清单（动手前 30 秒过一遍）
 
-- [ ] do 文件：`version 16`、`sysdir set PLUS`、`capture which` 关键包三件套在开头
+- [ ] do 文件：`version 16`、`sysdir set PLUS`、`capture which` 关键包三件套在开头（master.do 与各模板已内置，经 thesis_env 自动执行）
 - [ ] PowerShell Start-Process + `-Wait`，读完 log 再判结果（grep `r(\d+);`）
+- [ ] **do 文件以 UTF-8 无 BOM 保存**——报错 `﻿ is not a valid command name` 即 BOM 问题（Windows 记事本另存常见），用 VS Code/Notepad++ 转为无 BOM
+- [ ] **输出路径防漂移**：批处理下相对路径输出可能落到意外目录（实测落到安装目录）——模板已用 `global projdir = c(pwd)` 记录项目目录，thesis_table 自动锚定；其余输出建议绝对路径
 - [ ] Python：确认用目标解释器；新依赖先 `pip install`，装不上改纯 numpy/pandas 实现
 - [ ] 数据文件：UTF-8（csv 带 BOM 更稳），xlsx 中文列名直接可用；GBK 乱码 zip 用 Python zipfile 按 gbk 重解压
 - [ ] 输出：新文件不覆盖同名；结果文件落工作目录而非技能目录
