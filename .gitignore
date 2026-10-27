@@ -1,0 +1,15 @@
+# 严禁上传数据类文件（合规要求：本仓库只含方法文档与代码模板）
+*.dta
+*.xlsx
+*.xls
+*.csv
+*.zip
+*.7z
+*.rar
+*.pdf
+# 日志与临时产物
+*.log
+*.smcl
+*.png
+__pycache__/
+.ipynb_checkpoints/
